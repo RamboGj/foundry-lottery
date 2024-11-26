@@ -56,7 +56,7 @@ contract Raffle is VRFConsumerBaseV2Plus {
     uint256 private immutable i_interval;
     bytes32 private immutable i_keyHash;
     uint256 private immutable i_subscriptionId;
-    uint32 private immutable i_callbackGasPrice;
+    uint32 private immutable i_callbackGasLimit;
     address payable[] private s_players;
     uint256 private s_lastTimeStamp;
     address private s_recentWinner;
@@ -72,13 +72,13 @@ contract Raffle is VRFConsumerBaseV2Plus {
         address vrfCoordinator,
         bytes32 gasLane,
         uint256 subscriptionId,
-        uint32 callbackGasPrice
+        uint32 callbackGasLimit
     ) VRFConsumerBaseV2Plus(vrfCoordinator) {
         i_entranceFee = entranceFee;
         i_interval = interval;
         i_keyHash = gasLane;
         i_subscriptionId = subscriptionId;
-        i_callbackGasPrice = callbackGasPrice;
+        i_callbackGasLimit = callbackGasLimit;
 
         s_lastTimeStamp = block.timestamp;
         s_raffleState = RaffleState.OPEN;
@@ -146,7 +146,7 @@ contract Raffle is VRFConsumerBaseV2Plus {
                 keyHash: i_keyHash,
                 subId: i_subscriptionId,
                 requestConfirmations: REQUEST_CONFIRMATIONS,
-                callbackGasLimit: i_callbackGasPrice,
+                callbackGasLimit: i_callbackGasLimit,
                 numWords: NUMBER_OF_WORDS,
                 extraArgs: VRFV2PlusClient._argsToBytes(
                     // Set nativePayment to true to pay for VRF requests with Sepolia ETH instead of LINK
@@ -184,5 +184,9 @@ contract Raffle is VRFConsumerBaseV2Plus {
     /* Getter functions */
     function getEntranceFee() external view returns (uint256) {
         return i_entranceFee;
+    }
+
+    function getRaffleState() external view returns (RaffleState) {
+        return s_raffleState;
     }
 }
