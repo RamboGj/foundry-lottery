@@ -9,7 +9,9 @@ import {FundSubscription} from "script/Interactions.s.sol";
 import {AddConsumer} from "script/Interactions.s.sol";
 
 contract DeployRaffle is Script {
-    function run() public returns (Raffle) {}
+    function run() public returns (Raffle) {
+        deployContract();
+    }
 
     function deployContract() public returns (Raffle, HelperConfig) {
         HelperConfig helperConfig = new HelperConfig();
